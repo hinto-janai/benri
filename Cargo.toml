@@ -1,0 +1,20 @@
+[package]
+name = "benri"
+version = "0.1.0"
+edition = "2021"
+authors = ["hinto.janai <hinto.janai@protonmail.com>"]
+description = "Convenient macros wrapping the standard library"
+documentation = "https://docs.rs/benri"
+repository = "https://github.com/hinto-janai/benri"
+readme = "README.md"
+keywords = ["benri", "convenient", "std", "lib", "macro"]
+license = "MIT"
+
+[package.metadata.docs.rs]
+all-features = true
+
+[features]
+default = []
+
+[dependencies]
+log = { version = "0.4.17", features = ["std"], optional = true }
