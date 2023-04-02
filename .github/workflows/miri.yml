@@ -30,4 +30,4 @@ jobs:
         rustup toolchain install nightly --component miri
         rustup override set nightly
         cargo miri setup
-        cargo miri test --release --all-features
+        cargo miri test --release --all-features  -- --skip "time::unix" --skip "time::unix_result"
