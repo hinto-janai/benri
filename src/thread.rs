@@ -52,7 +52,7 @@ pub use sleep_secs;
 #[macro_export]
 /// Calls [`std::thread::park`]
 macro_rules! park {
-    ($millis:expr) => {
+    () => {
 		::std::thread::park()
     }
 }
