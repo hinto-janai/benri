@@ -103,6 +103,9 @@ pub mod panic;
 /// `std::sync::*`
 pub mod sync;
 
+/// `std::mem::*`
+pub mod mem;
+
 /// `std::thread::*`
 pub mod thread;
 

@@ -18,6 +18,15 @@ macro_rules! secs {
 pub use secs;
 
 #[macro_export]
+/// Calls [`std::time::Instant::elapsed`] and [`std::time::Duration::as_secs_f32()`]
+macro_rules! secs_f32 {
+	($t:expr) => {
+		$t.elapsed().as_secs_f32()
+	}
+}
+pub use secs_f32;
+
+#[macro_export]
 /// Calls [`std::time::Instant::elapsed`] and [`std::time::Duration::as_secs_f64()`]
 macro_rules! secs_f64 {
 	($t:expr) => {
@@ -52,6 +61,51 @@ macro_rules! nanos {
 	}
 }
 pub use nanos;
+
+#[macro_export]
+/// Expands to [`std::time::Duration::from_secs(1)`]
+macro_rules! second {
+	() => {
+		::std::time::Duration::from_secs(1)
+	}
+}
+pub use second;
+
+#[macro_export]
+/// Expands to [`std::time::Duration::from_millis(500)`]
+macro_rules! half_second {
+	() => {
+		::std::time::Duration::from_millis(500)
+	}
+}
+pub use half_second;
+
+#[macro_export]
+/// Expands to [`std::time::Duration::from_millis(333)`]
+macro_rules! third_second {
+	() => {
+		::std::time::Duration::from_millis(333)
+	}
+}
+pub use third_second;
+
+#[macro_export]
+/// Expands to [`std::time::Duration::from_millis(250)`]
+macro_rules! quarter_second {
+	() => {
+		::std::time::Duration::from_millis(250)
+	}
+}
+pub use quarter_second;
+
+#[macro_export]
+/// Expands to [`std::time::Duration::from_secs(60)`]
+macro_rules! minute {
+	() => {
+		::std::time::Duration::from_secs(60)
+	}
+}
+pub use minute;
 
 #[macro_export]
 /// Get the seconds elapsed [`std::time::UNIX_EPOCH`]

@@ -70,7 +70,7 @@ macro_rules! threads {
 			Ok(t)  => usize::from(t),
 			Err(e) => {
 				#[cfg(feature = "log")]
-				log::error!("std::thread::available_parallelism() failed, returning 1!");
+				::log::error!("std::thread::available_parallelism() failed, returning 1!");
 				1_usize
 			},
 		}
