@@ -10,26 +10,6 @@
 
 //---------------------------------------------------------------------------------------------------- Thread
 #[macro_export]
-/// Sleep the current thread for `x` milliseconds
-///
-/// ```rust
-/// # use benri::time::*;
-/// # use benri::thread::*;
-/// let now = now!();
-///
-/// // This sleeps the current thread for 1 second.
-/// sleep!(1000);
-///
-/// assert!(secs!(now) >= 1);
-/// ```
-macro_rules! sleep {
-    ($millis:expr) => {
-		::std::thread::sleep(::std::time::Duration::from_millis($millis))
-    }
-}
-pub use sleep;
-
-#[macro_export]
 /// Sleep the current thread for `x` seconds
 ///
 /// ```rust
@@ -42,12 +22,70 @@ pub use sleep;
 ///
 /// assert!(secs!(now) >= 1);
 /// ```
-macro_rules! sleep_secs {
+macro_rules! sleep {
     ($seconds:expr) => {
 		::std::thread::sleep(::std::time::Duration::from_secs($seconds))
     }
 }
-pub use sleep_secs;
+pub use sleep;
+
+#[macro_export]
+/// Sleep the current thread for `x` milliseconds
+///
+/// ```rust
+/// # use benri::time::*;
+/// # use benri::thread::*;
+/// let now = now!();
+///
+/// // This sleeps the current thread for 1 second.
+/// sleep!(1000);
+///
+/// assert!(secs!(now) >= 1);
+/// ```
+macro_rules! sleep_millis {
+    ($millis:expr) => {
+		::std::thread::sleep(::std::time::Duration::from_millis($millis))
+    }
+}
+pub use sleep_millis;
+
+#[macro_export]
+/// Sleep the current thread for `x` microseconds
+///
+/// ```rust
+/// # use benri::*;
+/// let now = now!();
+///
+/// // This sleeps the current thread for 1 second.
+/// sleep_nanos!(1_000_000);
+///
+/// assert!(secs!(now) >= 1);
+/// ```
+macro_rules! sleep_micros {
+    ($micros:expr) => {
+		::std::thread::sleep(::std::time::Duration::from_micros($micros))
+    }
+}
+pub use sleep_micros;
+
+#[macro_export]
+/// Sleep the current thread for `x` nanoseconds
+///
+/// ```rust
+/// # use benri::*;
+/// let now = now!();
+///
+/// // This sleeps the current thread for 1 second.
+/// sleep_nanos!(1_000_000_000);
+///
+/// assert!(secs!(now) >= 1);
+/// ```
+macro_rules! sleep_nanos {
+    ($nanos:expr) => {
+		::std::thread::sleep(::std::time::Duration::from_nanos($nanos))
+    }
+}
+pub use sleep_nanos;
 
 #[macro_export]
 /// Calls [`std::thread::park`]
