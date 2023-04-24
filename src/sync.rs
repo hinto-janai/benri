@@ -112,6 +112,24 @@ macro_rules! atomic_add {
 pub use atomic_add;
 
 #[macro_export]
+/// `fetch_sub()` a [`std::sync::atomic`] type with [`Ordering::SeqCst`]
+///
+/// ```rust
+/// # use std::sync::atomic::*;
+/// # use benri::sync::*;
+/// let a = AtomicUsize::new(5);
+/// atomic_sub!(a, 5);
+///
+/// assert!(atomic_load!(a) == 0);
+/// ```
+macro_rules! atomic_sub {
+	($atomic:expr, $i:expr) => {
+		$atomic.fetch_sub($i, ::std::sync::atomic::Ordering::SeqCst)
+	}
+}
+pub use atomic_sub;
+
+#[macro_export]
 /// `store()` a [`std::sync::atomic`] type with [`Ordering::SeqCst`]
 ///
 /// ```rust
