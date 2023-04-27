@@ -9,27 +9,15 @@ macro_rules! mass_panic {
 		// Log.
 		#[cfg(feature = "log")]
 		{
-			::log::error!("");
-			::log::error!("");
-			::log::error!("");
 			::log::error!("----- MASS PANIC: {} @ {} -----", file!(), line!());
 			::log::error!("{}", $($tts)*);
 			::log::error!("----- EXITING ALL THREADS -----");
-			::log::error!("");
-			::log::error!("");
-			::log::error!("");
 		}
 		#[cfg(not(feature = "log"))]
 		{
-			::std::eprintln!("");
-			::std::eprintln!("");
-			::std::eprintln!("");
 			::std::eprintln!("----- MASS PANIC: {} @ {} -----", file!(), line!());
 			::std::eprintln!("{}", $($tts)*);
 			::std::eprintln!("----- EXITING ALL THREADS -----");
-			::std::eprintln!("");
-			::std::eprintln!("");
-			::std::eprintln!("");
 		}
 
 		// Exit all threads.
