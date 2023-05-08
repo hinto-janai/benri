@@ -149,7 +149,7 @@ pub use atomic_store;
 
 //---------------------------------------------------------------------------------------------------- Channels
 #[macro_export]
-/// `.send()` a channel message, [`mass_panic!`] on failure
+/// `.send()` a channel message and `.unwrap()`
 ///
 /// ```rust
 /// # use benri::thread::*;
@@ -165,15 +165,13 @@ pub use atomic_store;
 /// ```
 macro_rules! send {
 	($channel:expr, $($msg:tt)*) => {
-		if let ::std::result::Result::Err(e) = $channel.send($($msg)*) {
-			$crate::panic::mass_panic!(e);
-		}
+		$channel.send($($msg)*).unwrap()
 	}
 }
 pub use send;
 
 #[macro_export]
-/// `recv.()` a channel message, [`mass_panic!`] on failure
+/// `.recv()` a channel message and `.unwrap()`
 ///
 /// ```rust
 /// # use benri::thread::*;
@@ -189,16 +187,13 @@ pub use send;
 /// ```
 macro_rules! recv {
 	($channel:expr) => {
-		match $channel.recv() {
-			::std::result::Result::Ok(msg) => msg,
-			::std::result::Result::Err(e)  => $crate::panic::mass_panic!(e),
-		}
+		$channel.recv().unwrap()
 	}
 }
 pub use recv;
 
 #[macro_export]
-/// `.send()` a channel message, [`panic!`] current thread on failure
+/// `.send()` a channel message, [`mass_panic!`] on failure
 ///
 /// ```rust
 /// # use benri::thread::*;
@@ -206,27 +201,27 @@ pub use recv;
 /// let (tx, rx) = std::sync::mpsc::channel::<u8>();
 ///
 /// std::thread::spawn(move || {
-///     send_or_die!(tx, 255);
+///     send_or_mass!(tx, 255);
 /// });
 ///
 /// sleep!(1000);
 /// assert!(recv_or_die!(rx) == 255);
 /// ```
-macro_rules! send_or_die {
+macro_rules! send_or_mass {
 	($channel:expr, $($msg:tt)*) => {
 		if let ::std::result::Result::Err(e) = $channel.send($($msg)*) {
 			#[cfg(feature = "log")]
 			::log::error!("THREAD PANIC - FAILED TO SEND: {}", e);
 			#[cfg(not(feature = "log"))]
 			::std::eprintln!("THREAD PANIC - FAILED TO SEND: {}", e);
-			::std::panic!("{}", e);
+			$crate::mass_panic!(e);
 		}
 	}
 }
-pub use send_or_die;
+pub use send_or_mass;
 
 #[macro_export]
-/// [`recv`] a channel message, [`panic!`] current thread on failure
+/// `.recv()` a channel message, [`mass_panic!`] on failure
 ///
 /// ```rust
 /// # use benri::thread::*;
@@ -234,13 +229,13 @@ pub use send_or_die;
 /// let (tx, rx) = std::sync::mpsc::channel::<u8>();
 ///
 /// std::thread::spawn(move || {
-///     send_or_die!(tx, 255);
+///     send_or_mass!(tx, 255);
 /// });
 ///
 /// sleep!(1000);
 /// assert!(recv_or_die!(rx) == 255);
 /// ```
-macro_rules! recv_or_die {
+macro_rules! recv_or_mass {
 	($channel:expr) => {
 		match $channel.recv() {
 			::std::result::Result::Ok(msg) => msg,
@@ -249,16 +244,16 @@ macro_rules! recv_or_die {
 				::log::error!("THREAD PANIC - FAILED TO RECEIVE: {}", e);
 				#[cfg(not(feature = "log"))]
 				::std::eprintln!("THREAD PANIC - FAILED TO RECEIVE: {}", e);
-				::std::panic!("{}", e);
+				$crate::mass_panic!(e);
 			},
 		}
 	}
 }
-pub use recv_or_die;
+pub use recv_or_mass;
 
 //---------------------------------------------------------------------------------------------------- Mutex/RwLock
 #[macro_export]
-/// `.lock()` a [`Mutex`] or [`mass_panic!()`]
+/// `.lock()` a [`Mutex`] and `.unwrap()`
 ///
 /// ```rust
 /// # use std::sync::Mutex;
@@ -269,51 +264,42 @@ pub use recv_or_die;
 /// ```
 macro_rules! lock {
 	($lock:expr) => {
-		match $lock.lock() {
-			::std::result::Result::Ok(lock) => lock,
-			::std::result::Result::Err(e)   => $crate::panic::mass_panic!(e),
-		}
+		$lock.lock().unwrap()
 	}
 }
 pub use lock;
 
 #[macro_export]
-/// `.read()` a [`RwLock`] or [`mass_panic!`]
+/// `.read()` a [`RwLock`] and `.unwrap()`
 ///
 /// ```rust
 /// # use std::sync::RwLock;
 /// # use benri::sync::*;
 /// let a = RwLock::new(0);
 ///
-/// assert!(*lock_read!(a) == 0);
+/// assert!(*lockr!(a) == 0);
 /// ```
-macro_rules! lock_read {
+macro_rules! lockr {
 	($lock:expr) => {
-		match $lock.read() {
-			::std::result::Result::Ok(lock) => lock,
-			::std::result::Result::Err(e)   => $crate::panic::mass_panic!(e),
-		}
+		$lock.read().unwrap()
 	}
 }
-pub use lock_read;
+pub use lockr;
 
 #[macro_export]
-/// `.write()` to a [`RwLock`] or [`mass_panic!`]
+/// `.write()` to a [`RwLock`] and .`unwrap()`
 ///
 /// ```rust
 /// # use std::sync::RwLock;
 /// # use benri::sync::*;
 /// let a = RwLock::new(0);
-/// *lock_write!(a) = 1;
+/// *lockw!(a) = 1;
 ///
-/// assert!(*lock_read!(a) == 1);
+/// assert!(*lockw!(a) == 1);
 /// ```
-macro_rules! lock_write {
+macro_rules! lockw {
 	($lock:expr) => {
-		match $lock.write() {
-			::std::result::Result::Ok(lock) => lock,
-			::std::result::Result::Err(e)   => $crate::panic::mass_panic!(e),
-		}
+		$lock.write().unwrap()
 	}
 }
-pub use lock_write;
+pub use lockw;

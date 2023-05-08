@@ -117,37 +117,18 @@ pub use minute;
 /// assert!(now > 1680460287);
 /// ```
 ///
-/// # Panics
+/// # Error
 /// This calls [`std::time::SystemTime::now`] then [`std::time::SystemTime::duration_since`].
 ///
-/// Since this macro calls `.unwrap()`, this will panic if the system clock is wrong.
+/// Those calls might error if the system clock is wrong.
+///
+/// On error, this macro will silently return `0`.
 macro_rules! unix {
 	() => {
-		::std::time::SystemTime::now().duration_since(::std::time::SystemTime::UNIX_EPOCH).unwrap().as_secs()
+		::std::time::SystemTime::now()
+			.duration_since(::std::time::SystemTime::UNIX_EPOCH)
+			.unwrap_or(::std::time::Duration::ZERO)
+			.as_secs()
 	}
 }
 pub use unix;
-
-#[macro_export]
-/// Get the seconds elapsed since [`std::time::UNIX_EPOCH`]
-///
-/// ```rust
-/// # use benri::time::*;
-/// let now = unix_result!().unwrap();
-///
-/// assert!(now > 1680460287);
-/// ```
-///
-/// # Errors
-/// This calls [`std::time::SystemTime::now`] then [`std::time::SystemTime::duration_since`].
-///
-/// This macro will return a [`Option::None`] if the above function fails.
-macro_rules! unix_result {
-	() => {
-		match ::std::time::SystemTime::now().duration_since(::std::time::SystemTime::UNIX_EPOCH) {
-			::std::result::Result::Ok(u)  => ::std::option::Option::Some(u.as_secs()),
-			::std::result::Result::Err(_) => ::std::option::Option::None,
-		}
-	}
-}
-pub use unix_result;
