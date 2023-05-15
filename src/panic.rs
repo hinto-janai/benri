@@ -55,3 +55,17 @@ macro_rules! unwrap_or_mass {
 	}
 }
 pub use unwrap_or_mass;
+
+#[macro_export]
+/// `panic!()`, but only in debug mode.
+macro_rules! debug_panic {
+	($($tts:tt)*) => {
+		#[cfg(debug_assertions)]
+		::std::panic!($($tts)*);
+	};
+
+	($tts:tt) => {
+		#[cfg(debug_assertions)]
+		::std::panic!($tts);
+	};
+}
