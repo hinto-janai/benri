@@ -61,13 +61,13 @@ pub use unwrap_or_mass;
 macro_rules! debug_panic {
 	($($tts:tt)*) => {
 		if ::std::cfg!(debug_assertions) {
-			::std::panic!($($tts)*);
+			::std::panic!("{}", ::std::format_args!($($tts)*));
 		}
 	};
 
 	($tts:tt) => {
 		if ::std::cfg!(debug_assertions) {
-			::std::panic!($tts);
+			::std::panic!("{}", $tts);
 		}
 	};
 }
