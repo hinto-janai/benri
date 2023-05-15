@@ -1,6 +1,6 @@
 [package]
 name = "benri"
-version = "0.1.7"
+version = "0.1.8"
 edition = "2021"
 authors = ["hinto.janai <hinto.janai@protonmail.com>"]
 description = "Convenient macros wrapping the standard library"

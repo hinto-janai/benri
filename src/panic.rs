@@ -60,12 +60,14 @@ pub use unwrap_or_mass;
 /// `panic!()`, but only in debug mode.
 macro_rules! debug_panic {
 	($($tts:tt)*) => {
-		#[cfg(debug_assertions)]
-		::std::panic!($($tts)*);
+		if ::std::cfg!(debug_assertions) {
+			::std::panic!($($tts)*);
+		}
 	};
 
 	($tts:tt) => {
-		#[cfg(debug_assertions)]
-		::std::panic!($tts);
+		if ::std::cfg!(debug_assertions) {
+			::std::panic!($tts);
+		}
 	};
 }
